@@ -1,0 +1,769 @@
+/* Teams Availability Scheduler - Popup Styles */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333;
+  background: #f5f5f5;
+  min-width: 780px;
+  max-width: 780px;
+}
+
+.container {
+  background: white;
+  padding: 12px;
+}
+
+header {
+  background: linear-gradient(135deg, #6264a7 0%, #464eb8 100%);
+  color: white;
+  text-align: center;
+  margin: -12px -12px 8px -12px;
+  padding: 16px 14px;
+}
+
+header h1 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.warning {
+  background: #fff3cd;
+  border-left: 6px solid #ffc107;
+  padding: 12px 14px;
+  margin: 12px 0;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #856404;
+}
+
+.warning strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.section {
+  padding: 12px;
+  border-bottom: 1px solid #e0e0e0;
+  position: relative;
+}
+
+.section:last-child {
+  border-bottom: none;
+}
+
+.section h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.section-description {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 16px;
+}
+
+/* Toggle Switch */
+.toggle-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.toggle-label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label-text {
+  font-weight: 500;
+  color: #333;
+}
+
+.label-description {
+  font-size: 12px;
+  color: #666;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.3s;
+  border-radius: 26px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #6264a7;
+}
+
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #6264a7;
+}
+
+/* Status Grid */
+.dashboard-section {
+  background: white;
+}
+
+.status-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.status-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.status-label {
+  font-weight: 500;
+  color: #666;
+}
+
+.status-value {
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: #f0f0f0;
+}
+
+.status-success {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-warning {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-error {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* Donate bar */
+.donate-bar {
+  text-align: center;
+  padding: 10px 12px 14px;
+}
+
+.btn-donate {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  background: #FFDD00;
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  font-family: inherit;
+}
+
+.btn-donate:hover {
+  background: #f0ce00;
+  transform: translateY(-1px);
+}
+
+/* Buttons */
+.btn {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.16s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: #6264a7;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #505285;
+}
+
+.btn-secondary {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.btn-secondary:hover {
+  background: #d0d0d0;
+}
+
+/* Schedule */
+.schedule-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.day-schedule {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 12px;
+  background: #fafafa;
+}
+
+.day-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.day-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.day-header h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.btn-add-interval,
+.btn-clear-day {
+  height: 28px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.btn-add-interval {
+  background: #6264a7;
+  color: white;
+}
+
+.btn-add-interval:hover {
+  background: #505285;
+}
+
+.btn-clear-day {
+  background: #dc3545;
+  color: white;
+}
+
+.btn-clear-day:hover {
+  background: #c82333;
+}
+
+.intervals-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.interval-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 8px;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #eee;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.time-separator {
+  color: #888;
+  margin: 0;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+/* Time picker: text input + clock icon button */
+.time-picker-wrap {
+  display: inline-flex;
+  align-items: stretch;
+  flex: 0 0 auto;
+}
+
+.time-picker-input {
+  width: 52px;
+  padding: 4px 3px;
+  border: 1px solid #ddd;
+  border-right: none;
+  border-radius: 4px 0 0 4px;
+  font-size: 13px;
+  font-family: inherit;
+  font-weight: 500;
+  text-align: center;
+  color: #444;
+  background: #fbfbfb;
+  letter-spacing: 0.3px;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.time-picker-input:focus {
+  border-color: #6264a7;
+  background: white;
+}
+
+.time-picker-clock-btn {
+  width: 24px;
+  padding: 0;
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.time-picker-clock-btn:hover {
+  background: #e8e8f8;
+  color: #6264a7;
+  border-color: #6264a7;
+}
+
+.time-picker-wrap:focus-within .time-picker-input,
+.time-picker-wrap:focus-within .time-picker-clock-btn {
+  border-color: #6264a7;
+}
+
+/* Drag handle */
+.drag-handle {
+  cursor: grab;
+  color: #d0d0d0;
+  display: flex;
+  align-items: center;
+  padding: 0 3px 0 1px;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.drag-handle:hover {
+  color: #aaa;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.interval-item.is-dragging {
+  opacity: 0.35;
+}
+
+.day-schedule.drop-active {
+  border-color: #6264a7 !important;
+  box-shadow: 0 0 0 2px rgba(98, 100, 167, 0.25);
+  background: #f0f0fb !important;
+}
+
+/* Custom status picker */
+.status-picker {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.status-picker-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.status-picker-btn:hover {
+  background: #e8e8f8;
+  border-color: #6264a7;
+}
+
+.status-picker-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 200;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  min-width: 140px;
+  padding: 4px 0;
+}
+
+.status-picker-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #333;
+  transition: background 0.1s;
+}
+
+.status-picker-option:hover {
+  background: #f5f5ff;
+}
+
+.status-picker-option.is-selected {
+  background: #eeeeff;
+  font-weight: 600;
+}
+
+/* Status dots */
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.status-dot--available { background: #6BB700; }
+.status-dot--busy      { background: #C4314B; }
+.status-dot--away      { background: #FFAA44; }
+.status-dot--dnd {
+  background: #C4314B;
+  position: relative;
+}
+.status-dot--dnd::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 15%;
+  right: 15%;
+  height: 2px;
+  background: white;
+  transform: translateY(-50%);
+  border-radius: 1px;
+}
+
+.btn-remove-interval {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  background: #f8f9fa;
+  color: #bcbcbc;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.btn-remove-interval:hover {
+  color: #dc3545;
+  background: #fdf0f0;
+  border-color: #dc3545;
+}
+
+.auto-save-notice {
+  text-align: center;
+  font-size: 12px;
+  color: #666;
+  font-style: italic;
+  margin-top: 12px;
+  padding: 8px;
+  background: #f0f0f0;
+  border-radius: 4px;
+}
+
+/* Info Box */
+.info-box {
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.info-box p {
+  margin-bottom: 8px;
+}
+
+.info-box p:last-child {
+  margin-bottom: 0;
+}
+
+.info-box strong {
+  color: #333;
+}
+
+/* General schedule section */
+.day-schedule--general {
+  border: 2px solid #6264a7;
+  background: #f0f0fb;
+}
+
+.general-badge {
+  display: inline-block;
+  background: #6264a7;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+.general-hint {
+  font-size: 12px;
+  color: #888;
+  font-style: italic;
+  padding: 4px 0 2px;
+}
+
+/* Schedule divider */
+.schedule-divider {
+  font-size: 11px;
+  font-weight: 600;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 10px 4px 6px;
+  border-top: 1px solid #e0e0e0;
+  margin-top: 4px;
+}
+
+/* Clone button — same size/style as status picker button */
+.btn-clone-interval {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #6264a7;
+  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.btn-clone-interval:hover {
+  background: #e8e8f8;
+  border-color: #6264a7;
+}
+
+@media (max-width: 450px) {
+  body {
+    min-width: 320px;
+  }
+
+  .toggle-container {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .switch {
+    align-self: flex-start;
+  }
+}
+
+/* ── Analog Clock Dialog ────────────────────────────────────────── */
+
+.clk-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.clk-dialog {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
+  overflow: hidden;
+  min-width: 300px;
+  user-select: none;
+}
+
+/* Header: purple background with large hour:minute display */
+.clk-header {
+  background: #6264a7;
+  padding: 20px 24px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.clk-part {
+  font-size: 52px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.6);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0 4px;
+  border-radius: 8px;
+  line-height: 1;
+  transition: color 0.15s, background 0.15s;
+}
+
+.clk-part:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.clk-part.active {
+  color: white;
+}
+
+.clk-colon {
+  font-size: 52px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1;
+  padding-bottom: 2px;
+}
+
+/* Mode label below header */
+.clk-mode-label {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding: 10px 0 4px;
+}
+
+/* Clock face area */
+.clk-face {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 20px 12px;
+}
+
+/* Action buttons row */
+.clk-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 8px 16px 16px;
+}
+
+.clk-btn {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.clk-btn--cancel {
+  background: transparent;
+  color: #6264a7;
+}
+
+.clk-btn--cancel:hover {
+  background: #f0f0fb;
+}
+
+.clk-btn--ok {
+  background: #6264a7;
+  color: white;
+}
+
+.clk-btn--ok:hover {
+  background: #505285;
+}

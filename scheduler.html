@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teams Availability Scheduler - Schedule</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      min-width: unset;
+      max-width: unset;
+      background: #f0f0f5;
+    }
+    .scheduler-wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 0 40px;
+    }
+    .scheduler-wrap header {
+      margin: 0 0 0 0;
+      border-radius: 0;
+    }
+    .scheduler-body {
+      padding: 20px 24px;
+    }
+    .scheduler-section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 16px;
+    }
+    .scheduler-section-desc {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="scheduler-wrap">
+    <header>
+      <h1>Teams Availability Scheduler</h1>
+      <p class="subtitle">Weekly Schedule Configuration</p>
+    </header>
+    <div class="scheduler-body">
+      <p class="scheduler-section-desc">
+        Define time slots where keep-alive should be active.
+        <strong>All Days</strong> slots apply every day; per-day slots override the status for that day.
+      </p>
+      <div id="scheduleContainer" class="schedule-container"></div>
+      <p class="auto-save-notice">Changes are saved automatically</p>
+    </div>
+  </div>
+  <script src="scheduler.js"></script>
+</body>
+</html>

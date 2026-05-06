@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teams Availability Scheduler</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Teams Availability Scheduler</h1>
+      <p class="subtitle">Schedule your Microsoft Teams availability status</p>
+    </header>
+
+    <!-- Status Section -->
+    <section class="section dashboard-section">
+      <div class="status-grid">
+        <div class="status-item">
+          <span class="status-label">Teams tabs:</span>
+          <span id="teamsStatus" class="status-value">Checking...</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">Last keep-alive:</span>
+          <span id="lastKeepAlive" class="status-value">Never</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">Extension:</span>
+          <span id="extensionStatus" class="status-value">Active</span>
+        </div>
+      </div>
+      <button type="button" id="openTeamsBtn" class="btn btn-secondary" style="display: none;">
+        Open Teams Web
+      </button>
+    </section>
+
+    <!-- Enable/Disable -->
+    <section class="section">
+      <div class="toggle-container">
+        <label for="extensionEnabled" class="toggle-label">
+          <span class="label-text">Extension Enabled</span>
+          <span class="label-description">Turn the keep-alive on or off</span>
+        </label>
+        <label class="switch">
+          <input type="checkbox" id="extensionEnabled" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+    </section>
+
+    <!-- Manual Mode -->
+    <section class="section">
+      <div class="toggle-container">
+        <label for="manualMode" class="toggle-label">
+          <span class="label-text">Manual mode (Always active)</span>
+          <span class="label-description">Activates keep-alive permanently, regardless of schedule</span>
+        </label>
+        <label class="switch">
+          <input type="checkbox" id="manualMode">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </section>
+
+    <!-- Force Available -->
+    <section class="section">
+      <div class="toggle-container">
+        <label for="forceAvailableMode" class="toggle-label">
+          <span class="label-text">Force "Available" status</span>
+          <span class="label-description">Always set status to Available (off: respects your current status like Busy/Away)</span>
+        </label>
+        <label class="switch">
+          <input type="checkbox" id="forceAvailableMode">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </section>
+
+    <!-- Respect Meetings -->
+    <section class="section">
+      <div class="toggle-container">
+        <label for="respectMeetingsMode" class="toggle-label">
+          <span class="label-text">Respect Call/Meeting Status</span>
+          <span class="label-description">Do not overwrite status during calls or meetings</span>
+        </label>
+        <label class="switch">
+          <input type="checkbox" id="respectMeetingsMode" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+    </section>
+
+    <!-- Weekly Schedule -->
+    <section class="section">
+      <div class="toggle-container">
+        <label class="toggle-label">
+          <span class="label-text">Weekly Schedule</span>
+          <span class="label-description">Configure time slots for each day of the week</span>
+        </label>
+        <button type="button" id="openSchedulerBtn" class="btn btn-primary">
+          Configure Schedule
+        </button>
+      </div>
+    </section>
+
+    <!-- Info -->
+    <section class="section">
+      <h2>Information</h2>
+      <div class="info-box">
+        <p><strong>Note:</strong> Keep-alive only works when Teams tabs are open.</p>
+        <p><strong>Timezone:</strong> The schedule uses your local timezone.</p>
+        <p><strong>Limitation:</strong> If your computer is in sleep mode, keep-alive will not work.</p>
+      </div>
+    </section>
+
+    <!-- Debug -->
+    <section class="section">
+      <div class="toggle-container">
+        <label for="debugMode" class="toggle-label">
+          <span class="label-text">Debug mode (logs)</span>
+          <span class="label-description">Enable console logs for debugging</span>
+        </label>
+        <label class="switch">
+          <input type="checkbox" id="debugMode">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </section>
+
+    <div class="warning" role="alert">
+      <strong>Warning:</strong> Use ethically and in compliance with your organization's policies.
+    </div>
+
+    <div class="donate-bar">
+      <button type="button" id="donateBtn" class="btn-donate">☕ Buy me a coffee</button>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

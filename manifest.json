@@ -1,27 +1,55 @@
 {
-    "manifest_version": 3,
-    "name": "Microsoft Teams: Always Available",
-    "version": "2.0.0",
-    "description": "A Chrome extension that keeps you available on teams 24/7",
-    "background": {
-        "service_worker": "background.js"
-    },
-    "icons": {
-        "16": "src/images/teamsIcon.png",
-        "128": "src/images/teamsIcon.png"
-    },
-    "action": {
-        "default_popup": "src/html/settings.html"
-    },
-    "permissions": [
-        "storage",
-        "alarms",
-        "tabs",
-        "scripting",
-        "webRequest"
-    ],
-    "host_permissions": [
+  "manifest_version": 3,
+  "name": "Teams Availability Scheduler",
+  "version": "1.0.0",
+  "description": "Schedule and maintain your Microsoft Teams availability status",
+  "permissions": ["alarms", "tabs", "scripting", "storage", "offscreen"],
+  "host_permissions": [
+    "https://*.teams.microsoft.com/*",
+    "https://*.teams.microsoft.com.mcas.ms/*",
+    "https://*.teams.microsoft.us/*",
+    "https://*.teams.microsoft.us.mcas.ms/*",
+    "https://teams.cloud.microsoft/*"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["keepAlive.js"],
+      "matches": [
         "https://*.teams.microsoft.com/*",
-        "https://*.teams.microsoft.com.mcas.ms/*"
-    ]
+        "https://*.teams.microsoft.com.mcas.ms/*",
+        "https://*.teams.microsoft.us/*",
+        "https://*.teams.microsoft.us.mcas.ms/*",
+        "https://teams.cloud.microsoft/*"
+      ]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "src/images/icon16.png",
+      "48": "src/images/icon48.png",
+      "128": "src/images/icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.teams.microsoft.com/*",
+        "https://*.teams.microsoft.com.mcas.ms/*",
+        "https://*.teams.microsoft.us/*",
+        "https://*.teams.microsoft.us.mcas.ms/*",
+        "https://teams.cloud.microsoft/*"
+      ],
+      "js": ["keepAlive.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "16": "src/images/icon16.png",
+    "48": "src/images/icon48.png",
+    "128": "src/images/icon128.png"
+  }
 }
