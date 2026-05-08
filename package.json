@@ -16,7 +16,7 @@
     "license": "ISC",
     "dependencies": {
         "@types/chrome": "^0.0.133",
-        "gulp": "^4.0.2",
+        "gulp": "^5.0.1",
         "gulp-javascript-obfuscator": "^1.1.6",
         "gulp-sourcemaps": "^3.0.0",
         "gulp-uglify": "^3.0.2",
@@ -24,6 +24,7 @@
         "vinyl-sourcemaps-apply": "^0.2.1"
     },
     "devDependencies": {
+        "crx": "^5.0.1",
         "eslint": "^8.31.0",
         "prettier": "^1.19.1",
         "prettier-airbnb-config": "^1.0.0"

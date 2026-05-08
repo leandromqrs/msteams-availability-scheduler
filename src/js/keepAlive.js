@@ -3,7 +3,7 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
   'use strict';
 
   const INTERVALS = {
-    CHECK_SECONDS: 30,
+    CHECK_SECONDS: 120,
     INITIAL_DELAY_MS: 100,
     MOVEMENT_MS: 5000,
     HEARTBEAT_MS: 3000,
@@ -238,6 +238,56 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
     } catch { }
   }
 
+  // --- Presence API (transparent, no UI) ---
+
+  function getPresenceToken() {
+    try {
+      for (const key of Object.keys(localStorage)) {
+        if (!key.toLowerCase().includes('presence.teams.microsoft.com')) continue;
+        try {
+          const val = JSON.parse(localStorage.getItem(key));
+          if (!val) continue;
+          const token = val.token || val.accessToken || val.access_token;
+          if (!token || typeof token !== 'string') continue;
+          const exp = val.expiresOn || val.tokenExpirationTime || val.expiry;
+          if (exp) {
+            const expMs = exp > 1e10 ? exp : exp * 1000;
+            if (expMs <= Date.now()) continue;
+          }
+          return token;
+        } catch { }
+      }
+    } catch { }
+    return null;
+  }
+
+  const STATUS_API_MAP = { available: 'Available', busy: 'Busy', away: 'Away', dnd: 'DoNotDisturb' };
+
+  async function setStatusViaApi(status) {
+    const token = getPresenceToken();
+    if (!token) return false;
+    const availability = STATUS_API_MAP[status];
+    if (!availability) return false;
+    try {
+      const isMcas = location.hostname.includes('.mcas.ms');
+      const url = isMcas
+        ? 'https://presence.teams.microsoft.com.mcas.ms/v1/me/forceavailability/'
+        : 'https://presence.teams.microsoft.com/v1/me/forceavailability/';
+      const res = await fetch(url, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ availability }),
+      });
+      if (res.ok) {
+        log(`[API] Status set: ${status}`);
+        lastKnownStatus = status;
+        lastStatusSetTime = Date.now();
+        return true;
+      }
+    } catch { }
+    return false;
+  }
+
   async function ensureStatus(scheduledStatus = null) {
     try {
       const current = getCurrentStatus();
@@ -263,6 +313,8 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
       // Enforce scheduled status
       if (scheduledStatus && ['available', 'busy', 'away', 'dnd'].includes(scheduledStatus) && current !== scheduledStatus) {
         log(`Enforcing scheduled status: ${scheduledStatus} (current: ${current})`);
+        if (await setStatusViaApi(scheduledStatus)) return true;
+        // DOM fallback
         if (await openPresenceMenu()) {
           await sleep(300);
           await clickStatusOption(scheduledStatus);
@@ -284,7 +336,8 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
       if (['available', 'busy', 'away', 'dnd'].includes(current)) {
         lastKnownStatus = current;
         if (forceAvailable && current !== 'available') {
-          // Force available
+          if (await setStatusViaApi('available')) return true;
+          // DOM fallback
           if (await openPresenceMenu()) {
             await sleep(300);
             await clickStatusOption('available');
@@ -297,6 +350,8 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
       }
 
       // Status is offline/unknown - set to available
+      if (await setStatusViaApi('available')) return true;
+      // DOM fallback
       if (!await openPresenceMenu()) { await closePresenceMenu(); return false; }
       await sleep(300);
       const ok = await clickStatusOption('available');
@@ -553,7 +608,7 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
       lastHeartbeatTime = Date.now();
       (async () => {
         try {
-          const { run, status } = await shouldBeRunning();
+          const { run } = await shouldBeRunning();
           if (!run) return;
           simulateMouseMovement();
           simulateActivity();
@@ -563,7 +618,6 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
             config.lastKeepAlive = new Date().toISOString();
             await chrome.storage.local.set({ config });
           } catch { }
-          await ensureStatus(status);
         } catch { }
       })();
       sendResponse({ received: true, tickCount });

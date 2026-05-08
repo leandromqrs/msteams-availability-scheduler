@@ -33,7 +33,7 @@ async function ensureOffscreenDocument() {
     const contexts = await chrome.runtime.getContexts({ contextTypes: ['OFFSCREEN_DOCUMENT'] });
     if (contexts.length > 0) return;
     await chrome.offscreen.createDocument({
-      url: 'offscreen.html',
+      url: 'src/html/offscreen.html',
       reasons: ['AUDIO_PLAYBACK'],
       justification: 'Keep service worker alive to prevent Chrome throttling',
     });

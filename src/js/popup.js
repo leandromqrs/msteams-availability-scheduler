@@ -131,7 +131,7 @@ async function init() {
   });
 
   document.getElementById('openSchedulerBtn').addEventListener('click', () => {
-    chrome.tabs.create({ url: chrome.runtime.getURL('scheduler.html') });
+    chrome.tabs.create({ url: chrome.runtime.getURL('src/html/scheduler.html') });
   });
 
   document.getElementById('donateBtn').addEventListener('click', () => {

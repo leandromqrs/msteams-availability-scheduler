@@ -13,7 +13,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["keepAlive.js"],
+      "resources": ["src/js/keepAlive.js"],
       "matches": [
         "https://*.teams.microsoft.com/*",
         "https://*.teams.microsoft.com.mcas.ms/*",
@@ -24,7 +24,7 @@
     }
   ],
   "action": {
-    "default_popup": "popup.html",
+    "default_popup": "src/html/popup.html",
     "default_icon": {
       "16": "src/images/icon16.png",
       "48": "src/images/icon48.png",
@@ -32,7 +32,7 @@
     }
   },
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "src/js/background.js"
   },
   "content_scripts": [
     {
@@ -43,7 +43,7 @@
         "https://*.teams.microsoft.us.mcas.ms/*",
         "https://teams.cloud.microsoft/*"
       ],
-      "js": ["keepAlive.js"],
+      "js": ["src/js/keepAlive.js"],
       "run_at": "document_idle"
     }
   ],

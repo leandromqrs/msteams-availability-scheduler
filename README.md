@@ -1,5 +1,9 @@
 ## Teams Availability Scheduler
 
+[![Build](https://github.com/leandromqrs/msteams-availability-scheduler/actions/workflows/build.yml/badge.svg)](https://github.com/leandromqrs/msteams-availability-scheduler/actions/workflows/build.yml)
+[![Chrome Web Store](https://img.shields.io/badge/Chrome-Web%20Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com)
+[![Edge Add-ons](https://img.shields.io/badge/Microsoft%20Edge-Add--ons-0078D4?logo=microsoftedge&logoColor=white)](https://microsoftedge.microsoft.com/addons)
+
 A Chrome/Edge extension that keeps your Microsoft Teams status active on a configurable weekly schedule, no subscriptions, no accounts, no external servers.
 
 > **Note:** Use ethically and in compliance with your organization's policies.
