@@ -159,10 +159,29 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
         '#calling-unified-bar', '[data-tid="call-control-bar"]', '[data-tid="hangup-button"]',
         '[data-tid="call-monitor"]', '[data-tid="calling-unified-bar"]', '[data-tid="hangup-btn"]',
         '[class*="calling-controls"]', '[class*="call-monitor"]', '[class*="ts-calling-screen"]',
+        '[data-tid="leave-call-button"]', '[data-tid="end-call-button"]', '[data-tid="hang-up"]',
+        '[data-tid="meeting-stage"]', '[data-tid="meeting-toolbar"]',
+        '[data-tid="calling-sound-on-off"]', '[data-tid="microphone-button"]',
+        '[data-tid="call-duration"]', '[data-tid="calling-stream"]',
+        '[data-tid="calling-screen-background"]', '[data-tid="calling-pagination"]',
       ];
       for (const s of callSelectors) {
         try { if (document.querySelector(s)) return true; } catch { continue; }
       }
+      // Check page title for meeting/call words (multilingual)
+      try {
+        const titleLower = document.title.toLowerCase();
+        const meetingWords = ['reunião', 'meeting', 'réunion', 'besprechung', 'vergadering', '会議', '通話', '회의'];
+        if (meetingWords.some(w => titleLower.includes(w))) return true;
+      } catch { }
+      // Check profile button aria-label for meeting phrases (Teams v2)
+      try {
+        const profileBtn = document.querySelector(SEL.v2.profileButton) || document.querySelector(SEL.v1.profileButton);
+        if (profileBtn) {
+          const ariaLabel = (profileBtn.getAttribute('aria-label') || '').toLowerCase();
+          if (isCallPhrase(ariaLabel)) return true;
+        }
+      } catch { }
       return getCurrentStatus() === 'in_call';
     } catch { return false; }
   }
@@ -295,8 +314,8 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
 
       let respectMeetings = true;
       try {
-        const s = await chrome.storage.local.get(['respectMeetingsMode']);
-        respectMeetings = s.respectMeetingsMode !== false;
+        const s = await chrome.storage.local.get(['config']);
+        respectMeetings = s.config?.respectMeetingsMode !== false;
       } catch { }
 
       if (respectMeetings && isInCallOrMeeting()) {
@@ -314,7 +333,11 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
       if (scheduledStatus && ['available', 'busy', 'away', 'dnd'].includes(scheduledStatus) && current !== scheduledStatus) {
         log(`Enforcing scheduled status: ${scheduledStatus} (current: ${current})`);
         if (await setStatusViaApi(scheduledStatus)) return true;
-        // DOM fallback
+        // DOM fallback - re-check meeting state before opening menu
+        if (respectMeetings && isInCallOrMeeting()) {
+          log('In call/meeting detected before DOM fallback, skipping');
+          return true;
+        }
         if (await openPresenceMenu()) {
           await sleep(300);
           await clickStatusOption(scheduledStatus);
@@ -328,8 +351,8 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
 
       let forceAvailable = false;
       try {
-        const s = await chrome.storage.local.get(['forceAvailableMode']);
-        forceAvailable = s.forceAvailableMode === true;
+        const s = await chrome.storage.local.get(['config']);
+        forceAvailable = s.config?.forceAvailableMode === true;
       } catch { }
 
       // If status is active, just simulate activity
@@ -337,7 +360,11 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
         lastKnownStatus = current;
         if (forceAvailable && current !== 'available') {
           if (await setStatusViaApi('available')) return true;
-          // DOM fallback
+          // DOM fallback - re-check meeting state before opening menu
+          if (respectMeetings && isInCallOrMeeting()) {
+            log('In call/meeting detected before DOM fallback, skipping');
+            return true;
+          }
           if (await openPresenceMenu()) {
             await sleep(300);
             await clickStatusOption('available');
@@ -351,7 +378,11 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
 
       // Status is offline/unknown - set to available
       if (await setStatusViaApi('available')) return true;
-      // DOM fallback
+      // DOM fallback - re-check meeting state before opening menu
+      if (respectMeetings && isInCallOrMeeting()) {
+        log('In call/meeting detected before DOM fallback, skipping');
+        return true;
+      }
       if (!await openPresenceMenu()) { await closePresenceMenu(); return false; }
       await sleep(300);
       const ok = await clickStatusOption('available');
