@@ -7,12 +7,16 @@ import { resolve } from 'path';
 
 const require = createRequire(import.meta.url);
 
+const manifest = JSON.parse(readFileSync('manifest.json', 'utf-8'));
+const SLUG = manifest.name.toLowerCase().replace(/\s+/g, '-');
+const BUILD_NAME = `${SLUG}-${manifest.version}`;
+
 const JS_SRC = ['src/js/**'];
 const STATIC_SRC = ['manifest.json', 'src/css/**', 'src/html/**', 'src/images/**'];
-const UNPACKED = 'production/unpacked';
+const UNPACKED = `dist/${BUILD_NAME}`;
 
 function clean(done) {
-  if (existsSync('production')) rmSync('production', { recursive: true, force: true });
+  if (existsSync('dist')) rmSync('dist', { recursive: true, force: true });
   done();
 }
 
@@ -27,8 +31,8 @@ const copyStatic = () =>
 
 const buildZip = () =>
   gulp.src(`${UNPACKED}/**`, { base: UNPACKED })
-    .pipe(zip('extension.zip'))
-    .pipe(gulp.dest('production'));
+    .pipe(zip(`${BUILD_NAME}.zip`))
+    .pipe(gulp.dest('dist'));
 
 async function buildCrx() {
   const keyPath = process.env.CRX_KEY_PATH || 'key.pem';
@@ -40,8 +44,8 @@ async function buildCrx() {
   const crx = new CRX({ privateKey: readFileSync(keyPath) });
   await crx.load(resolve(UNPACKED));
   const buf = await crx.pack();
-  writeFileSync('production/extension.crx', buf);
-  console.log('[CRX] Built: production/extension.crx');
+  writeFileSync(`dist/${BUILD_NAME}.crx`, buf);
+  console.log(`[CRX] Built: dist/${BUILD_NAME}.crx`);
 }
 
 export default gulp.series(

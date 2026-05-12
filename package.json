@@ -1,10 +1,10 @@
 {
-    "name": "ms-teams-always-available",
-    "version": "2.0.0",
-    "description": "A Chrome extension that keeps you available on teams 24/7",
+    "name": "msteams-availability-scheduler",
+    "version": "1.0.2",
+    "description": "Schedule and maintain your Microsoft Teams availability status",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/akump/MS-Teams-Always-Available.git"
+        "url": "git+https://github.com/leandromqrs/msteams-availability-scheduler.git"
     },
     "scripts": {
         "build": "gulp",
