@@ -38,14 +38,14 @@ async function saveConfig() {
 }
 
 function formatLastKeepAlive(isoString) {
-  if (!isoString) return 'Never';
+  if (!isoString) return chrome.i18n.getMessage('statusNever');
   try {
     const date = new Date(isoString);
     const diff = Math.floor((Date.now() - date) / 1000);
-    if (diff < 60) return `${diff}s ago`;
-    if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+    if (diff < 60) return chrome.i18n.getMessage('timeAgoSeconds', [diff.toString()]);
+    if (diff < 3600) return chrome.i18n.getMessage('timeAgoMinutes', [Math.floor(diff / 60).toString()]);
     return date.toLocaleTimeString();
-  } catch { return 'Unknown'; }
+  } catch { return chrome.i18n.getMessage('statusError'); }
 }
 
 async function updateStatus() {
@@ -66,11 +66,12 @@ async function updateStatus() {
     });
 
     if (tabs.length > 0) {
-      teamsStatusEl.textContent = `${tabs.length} tab${tabs.length > 1 ? 's' : ''} open`;
+      const key = tabs.length === 1 ? 'tabOpen' : 'tabsOpen';
+      teamsStatusEl.textContent = chrome.i18n.getMessage(key, [tabs.length.toString()]);
       teamsStatusEl.className = 'status-value status-success';
       openTeamsBtn.style.display = 'none';
     } else {
-      teamsStatusEl.textContent = 'No tabs open';
+      teamsStatusEl.textContent = chrome.i18n.getMessage('noTabsOpen');
       teamsStatusEl.className = 'status-value status-warning';
       openTeamsBtn.style.display = 'block';
     }
@@ -80,15 +81,16 @@ async function updateStatus() {
     lastKeepAliveEl.textContent = formatLastKeepAlive(cfg.lastKeepAlive);
 
     const enabled = storage.extensionEnabled !== false;
-    extensionStatusEl.textContent = enabled ? 'Active' : 'Disabled';
+    extensionStatusEl.textContent = chrome.i18n.getMessage(enabled ? 'statusActive' : 'statusDisabled');
     extensionStatusEl.className = `status-value ${enabled ? 'status-success' : 'status-error'}`;
   } catch {
-    teamsStatusEl.textContent = 'Error';
+    teamsStatusEl.textContent = chrome.i18n.getMessage('statusError');
     teamsStatusEl.className = 'status-value status-error';
   }
 }
 
 async function init() {
+  applyI18n();
   const storage = await loadConfig();
 
   const enabledCheckbox = document.getElementById('extensionEnabled');

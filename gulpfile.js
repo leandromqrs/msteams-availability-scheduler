@@ -8,11 +8,12 @@ import { resolve } from 'path';
 const require = createRequire(import.meta.url);
 
 const manifest = JSON.parse(readFileSync('manifest.json', 'utf-8'));
-const SLUG = manifest.name.toLowerCase().replace(/\s+/g, '-');
+const pkg      = JSON.parse(readFileSync('package.json', 'utf-8'));
+const SLUG     = pkg.name;
 const BUILD_NAME = `${SLUG}-${manifest.version}`;
 
 const JS_SRC = ['src/js/**'];
-const STATIC_SRC = ['manifest.json', 'src/css/**', 'src/html/**', 'src/images/**'];
+const STATIC_SRC = ['manifest.json', '_locales/**', 'src/css/**', 'src/html/**', 'src/images/**'];
 const UNPACKED = `dist/${BUILD_NAME}`;
 
 function clean(done) {
@@ -26,11 +27,11 @@ const copyJs = () =>
     .pipe(gulp.dest(UNPACKED));
 
 const copyStatic = () =>
-  gulp.src(STATIC_SRC, { base: '.' })
+  gulp.src(STATIC_SRC, { base: '.', encoding: false })
     .pipe(gulp.dest(UNPACKED));
 
 const buildZip = () =>
-  gulp.src(`${UNPACKED}/**`, { base: UNPACKED })
+  gulp.src(`${UNPACKED}/**`, { base: UNPACKED, encoding: false })
     .pipe(zip(`${BUILD_NAME}.zip`))
     .pipe(gulp.dest('dist'));
 

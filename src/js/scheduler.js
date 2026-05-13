@@ -13,25 +13,25 @@ const DEFAULT_CONFIG = {
 };
 
 const DAY_NAMES = [
-  { key: 'monday',    label: 'Monday' },
-  { key: 'tuesday',   label: 'Tuesday' },
-  { key: 'wednesday', label: 'Wednesday' },
-  { key: 'thursday',  label: 'Thursday' },
-  { key: 'friday',    label: 'Friday' },
-  { key: 'saturday',  label: 'Saturday' },
-  { key: 'sunday',    label: 'Sunday' },
+  { key: 'monday',    label: chrome.i18n.getMessage('dayMonday') },
+  { key: 'tuesday',   label: chrome.i18n.getMessage('dayTuesday') },
+  { key: 'wednesday', label: chrome.i18n.getMessage('dayWednesday') },
+  { key: 'thursday',  label: chrome.i18n.getMessage('dayThursday') },
+  { key: 'friday',    label: chrome.i18n.getMessage('dayFriday') },
+  { key: 'saturday',  label: chrome.i18n.getMessage('daySaturday') },
+  { key: 'sunday',    label: chrome.i18n.getMessage('daySunday') },
 ];
 
 const ALL_KEYS = [
-  { key: 'general', label: 'All Days' },
+  { key: 'general', label: chrome.i18n.getMessage('generalBadge') },
   ...DAY_NAMES,
 ];
 
 const STATUS_OPTIONS = [
-  { value: 'available', label: 'Available' },
-  { value: 'busy',      label: 'Busy' },
-  { value: 'away',      label: 'Away' },
-  { value: 'dnd',       label: 'Do Not Disturb' },
+  { value: 'available', label: chrome.i18n.getMessage('statusAvailable') },
+  { value: 'busy',      label: chrome.i18n.getMessage('statusBusy') },
+  { value: 'away',      label: chrome.i18n.getMessage('statusAway') },
+  { value: 'dnd',       label: chrome.i18n.getMessage('statusDnd') },
 ];
 
 let config = { ...DEFAULT_CONFIG };
@@ -121,7 +121,7 @@ function buildCloneBtn(dayKey, interval) {
   const btn = document.createElement('button');
   btn.type = 'button';
   btn.className = 'btn-clone-interval';
-  btn.title = 'Duplicate this interval';
+  btn.title = chrome.i18n.getMessage('titleDuplicate');
   btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>';
 
   btn.addEventListener('click', async () => {
@@ -176,11 +176,11 @@ function showClockDialog(initH, initM, onConfirm) {
 
   const cancelBtn = document.createElement('button');
   cancelBtn.type = 'button'; cancelBtn.className = 'clk-btn clk-btn--cancel';
-  cancelBtn.textContent = 'Cancel';
+  cancelBtn.textContent = chrome.i18n.getMessage('btnCancel');
 
   const okBtn = document.createElement('button');
   okBtn.type = 'button'; okBtn.className = 'clk-btn clk-btn--ok';
-  okBtn.textContent = 'OK';
+  okBtn.textContent = chrome.i18n.getMessage('btnOk');
 
   acts.append(cancelBtn, okBtn);
   dialog.append(header, modeLabel, face, acts);
@@ -194,7 +194,7 @@ function showClockDialog(initH, initM, onConfirm) {
     mBtn.textContent = fmt(minutes);
     hBtn.classList.toggle('active', mode === 'hours');
     mBtn.classList.toggle('active', mode === 'minutes');
-    modeLabel.textContent = mode === 'hours' ? 'Select hour' : 'Select minute';
+    modeLabel.textContent = chrome.i18n.getMessage(mode === 'hours' ? 'clockSelectHour' : 'clockSelectMinute');
   }
 
   function mk(tag, ns) {
@@ -390,7 +390,7 @@ function createTimePicker(initialValue, onChange) {
   const clockBtn = document.createElement('button');
   clockBtn.type = 'button';
   clockBtn.className = 'time-picker-clock-btn';
-  clockBtn.title = 'Open clock picker';
+  clockBtn.title = chrome.i18n.getMessage('titleClockPicker');
   clockBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>';
 
   clockBtn.addEventListener('click', (e) => {
@@ -419,7 +419,7 @@ function createIntervalElement(dayKey, interval, index) {
 
   const handle = document.createElement('div');
   handle.className = 'drag-handle';
-  handle.title = 'Drag to reorder';
+  handle.title = chrome.i18n.getMessage('titleDragReorder');
   handle.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg>';
 
   handle.addEventListener('mousedown', () => {
@@ -468,7 +468,7 @@ function createIntervalElement(dayKey, interval, index) {
 
   const removeBtn = document.createElement('button');
   removeBtn.className = 'btn-remove-interval';
-  removeBtn.title = 'Remove interval';
+  removeBtn.title = chrome.i18n.getMessage('titleRemove');
   removeBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
 
   removeBtn.addEventListener('click', async () => {
@@ -498,7 +498,8 @@ function renderDaySection({ key, label, isGeneral }) {
 
   const title = document.createElement('h3');
   if (isGeneral) {
-    title.innerHTML = `<span class="general-badge">All Days</span> ${label}`;
+    const badge = chrome.i18n.getMessage('generalBadge');
+    title.innerHTML = `<span class="general-badge">${badge}</span> ${label}`;
   } else {
     title.textContent = label;
   }
@@ -508,7 +509,7 @@ function renderDaySection({ key, label, isGeneral }) {
 
   const addBtn = document.createElement('button');
   addBtn.className = 'btn-add-interval';
-  addBtn.textContent = '+ Add';
+  addBtn.textContent = chrome.i18n.getMessage('btnAdd');
   addBtn.addEventListener('click', async () => {
     if (!Array.isArray(config.schedule[key])) config.schedule[key] = [];
     config.schedule[key].push({ start: '09:00', end: '17:00', status: 'available' });
@@ -518,7 +519,7 @@ function renderDaySection({ key, label, isGeneral }) {
 
   const clearBtn = document.createElement('button');
   clearBtn.className = 'btn-clear-day';
-  clearBtn.textContent = 'Clear';
+  clearBtn.textContent = chrome.i18n.getMessage('btnClear');
   clearBtn.addEventListener('click', async () => {
     config.schedule[key] = [];
     await saveConfig();
@@ -540,7 +541,7 @@ function renderDaySection({ key, label, isGeneral }) {
   } else if (isGeneral) {
     const hint = document.createElement('p');
     hint.className = 'general-hint';
-    hint.textContent = 'Slots added here apply to every day of the week.';
+    hint.textContent = chrome.i18n.getMessage('generalHint');
     dayDiv.appendChild(hint);
   }
 
@@ -596,11 +597,11 @@ function renderSchedule() {
   const container = document.getElementById('scheduleContainer');
   container.innerHTML = '';
 
-  container.appendChild(renderDaySection({ key: 'general', label: 'General Schedule', isGeneral: true }));
+  container.appendChild(renderDaySection({ key: 'general', label: chrome.i18n.getMessage('generalScheduleLabel'), isGeneral: true }));
 
   const divider = document.createElement('div');
   divider.className = 'schedule-divider';
-  divider.textContent = 'Per-day overrides';
+  divider.textContent = chrome.i18n.getMessage('perDayDivider');
   container.appendChild(divider);
 
   DAY_NAMES.forEach(({ key, label }) => {
@@ -609,6 +610,7 @@ function renderSchedule() {
 }
 
 async function init() {
+  applyI18n();
   await loadConfig();
   renderSchedule();
 }

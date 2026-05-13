@@ -3,33 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Teams Availability Scheduler</title>
+  <title data-i18n="appName">Teams Availability Scheduler</title>
   <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>Teams Availability Scheduler</h1>
-      <p class="subtitle">Schedule your Microsoft Teams availability status</p>
+      <h1 data-i18n="appName">Teams Availability Scheduler</h1>
+      <p class="subtitle" data-i18n="popupSubtitle">Schedule your Microsoft Teams availability status</p>
     </header>
 
     <!-- Status Section -->
     <section class="section dashboard-section">
       <div class="status-grid">
         <div class="status-item">
-          <span class="status-label">Teams tabs:</span>
-          <span id="teamsStatus" class="status-value">Checking...</span>
+          <span class="status-label" data-i18n="statusLabelTeams">Teams tabs:</span>
+          <span id="teamsStatus" class="status-value" data-i18n="statusChecking">Checking...</span>
         </div>
         <div class="status-item">
-          <span class="status-label">Last keep-alive:</span>
-          <span id="lastKeepAlive" class="status-value">Never</span>
+          <span class="status-label" data-i18n="statusLabelKeepAlive">Last keep-alive:</span>
+          <span id="lastKeepAlive" class="status-value" data-i18n="statusNever">Never</span>
         </div>
         <div class="status-item">
-          <span class="status-label">Extension:</span>
-          <span id="extensionStatus" class="status-value">Active</span>
+          <span class="status-label" data-i18n="statusLabelExtension">Extension:</span>
+          <span id="extensionStatus" class="status-value" data-i18n="statusActive">Active</span>
         </div>
       </div>
-      <button type="button" id="openTeamsBtn" class="btn btn-secondary" style="display: none;">
+      <button type="button" id="openTeamsBtn" class="btn btn-secondary" style="display: none;" data-i18n="btnOpenTeams">
         Open Teams Web
       </button>
     </section>
@@ -38,8 +38,8 @@
     <section class="section">
       <div class="toggle-container">
         <label for="extensionEnabled" class="toggle-label">
-          <span class="label-text">Extension Enabled</span>
-          <span class="label-description">Turn the keep-alive on or off</span>
+          <span class="label-text" data-i18n="labelExtensionEnabled">Extension Enabled</span>
+          <span class="label-description" data-i18n="descExtensionEnabled">Turn the keep-alive on or off</span>
         </label>
         <label class="switch">
           <input type="checkbox" id="extensionEnabled" checked>
@@ -52,8 +52,8 @@
     <section class="section">
       <div class="toggle-container">
         <label for="manualMode" class="toggle-label">
-          <span class="label-text">Manual mode (Always active)</span>
-          <span class="label-description">Activates keep-alive permanently, regardless of schedule</span>
+          <span class="label-text" data-i18n="labelManualMode">Manual mode (Always active)</span>
+          <span class="label-description" data-i18n="descManualMode">Activates keep-alive permanently, regardless of schedule</span>
         </label>
         <label class="switch">
           <input type="checkbox" id="manualMode">
@@ -66,8 +66,8 @@
     <section class="section">
       <div class="toggle-container">
         <label for="forceAvailableMode" class="toggle-label">
-          <span class="label-text">Force "Available" status</span>
-          <span class="label-description">Always set status to Available (off: respects your current status like Busy/Away)</span>
+          <span class="label-text" data-i18n="labelForceAvailable">Force "Available" status</span>
+          <span class="label-description" data-i18n="descForceAvailable">Always set status to Available (off: respects your current status like Busy/Away)</span>
         </label>
         <label class="switch">
           <input type="checkbox" id="forceAvailableMode">
@@ -80,8 +80,8 @@
     <section class="section">
       <div class="toggle-container">
         <label for="respectMeetingsMode" class="toggle-label">
-          <span class="label-text">Respect Call/Meeting Status</span>
-          <span class="label-description">Do not overwrite status during calls or meetings</span>
+          <span class="label-text" data-i18n="labelRespectMeetings">Respect Call/Meeting Status</span>
+          <span class="label-description" data-i18n="descRespectMeetings">Do not overwrite status during calls or meetings</span>
         </label>
         <label class="switch">
           <input type="checkbox" id="respectMeetingsMode" checked>
@@ -94,10 +94,10 @@
     <section class="section">
       <div class="toggle-container">
         <label class="toggle-label">
-          <span class="label-text">Weekly Schedule</span>
-          <span class="label-description">Configure time slots for each day of the week</span>
+          <span class="label-text" data-i18n="labelWeeklySchedule">Weekly Schedule</span>
+          <span class="label-description" data-i18n="descWeeklySchedule">Configure time slots for each day of the week</span>
         </label>
-        <button type="button" id="openSchedulerBtn" class="btn btn-primary">
+        <button type="button" id="openSchedulerBtn" class="btn btn-primary" data-i18n="btnConfigureSchedule">
           Configure Schedule
         </button>
       </div>
@@ -105,11 +105,11 @@
 
     <!-- Info -->
     <section class="section">
-      <h2>Information</h2>
+      <h2 data-i18n="sectionInfo">Information</h2>
       <div class="info-box">
-        <p><strong>Note:</strong> Keep-alive only works when Teams tabs are open.</p>
-        <p><strong>Timezone:</strong> The schedule uses your local timezone.</p>
-        <p><strong>Limitation:</strong> If your computer is in sleep mode, keep-alive will not work.</p>
+        <p><strong data-i18n="infoNoteLabel">Note:</strong> <span data-i18n="infoNote">Keep-alive only works when Teams tabs are open.</span></p>
+        <p><strong data-i18n="infoTimezoneLabel">Timezone:</strong> <span data-i18n="infoTimezone">The schedule uses your local timezone.</span></p>
+        <p><strong data-i18n="infoLimitationLabel">Limitation:</strong> <span data-i18n="infoLimitation">If your computer is in sleep mode, keep-alive will not work.</span></p>
       </div>
     </section>
 
@@ -117,8 +117,8 @@
     <section class="section">
       <div class="toggle-container">
         <label for="debugMode" class="toggle-label">
-          <span class="label-text">Debug mode (logs)</span>
-          <span class="label-description">Enable console logs for debugging</span>
+          <span class="label-text" data-i18n="labelDebugMode">Debug mode (logs)</span>
+          <span class="label-description" data-i18n="descDebugMode">Enable console logs for debugging</span>
         </label>
         <label class="switch">
           <input type="checkbox" id="debugMode">
@@ -128,14 +128,15 @@
     </section>
 
     <div class="warning" role="alert">
-      <strong>Warning:</strong> Use ethically and in compliance with your organization's policies.
+      <strong data-i18n="warningLabel">Warning:</strong> <span data-i18n="warningText">Use ethically and in compliance with your organization's policies.</span>
     </div>
 
     <div class="donate-bar">
-      <button type="button" id="donateBtn" class="btn-donate">☕ Buy me a coffee</button>
+      <button type="button" id="donateBtn" class="btn-donate" data-i18n="btnDonate">☕ Buy me a coffee</button>
     </div>
   </div>
 
+  <script src="../js/i18n.js"></script>
   <script src="../js/popup.js"></script>
 </body>
 </html>
