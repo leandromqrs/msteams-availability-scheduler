@@ -3,7 +3,7 @@
   "name": "Teams Availability Scheduler",
   "version": "1.0.2",
   "description": "Schedule and maintain your Microsoft Teams availability status",
-  "permissions": ["alarms", "tabs", "scripting", "storage", "offscreen"],
+  "permissions": ["alarms", "tabs", "storage", "offscreen"],
   "host_permissions": [
     "https://*.teams.microsoft.com/*",
     "https://*.teams.microsoft.com.mcas.ms/*",
