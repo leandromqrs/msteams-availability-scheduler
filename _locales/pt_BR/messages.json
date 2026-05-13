@@ -1,0 +1,90 @@
+{
+  "appName":        { "message": "Teams Availability Scheduler" },
+  "appDescription": { "message": "Agende e mantenha seu status de disponibilidade no Microsoft Teams" },
+
+  "popupSubtitle":        { "message": "Agende seu status de disponibilidade no Microsoft Teams" },
+  "statusLabelTeams":     { "message": "Abas do Teams:" },
+  "statusChecking":       { "message": "Verificando..." },
+  "statusLabelKeepAlive": { "message": "Último keep-alive:" },
+  "statusNever":          { "message": "Nunca" },
+  "statusLabelExtension": { "message": "Extensão:" },
+  "statusActive":         { "message": "Ativo" },
+  "statusDisabled":       { "message": "Desativado" },
+  "statusError":          { "message": "Erro" },
+  "btnOpenTeams":         { "message": "Abrir Teams Web" },
+
+  "labelExtensionEnabled": { "message": "Extensão Ativada" },
+  "descExtensionEnabled":  { "message": "Ligar ou desligar o keep-alive" },
+  "labelManualMode":       { "message": "Modo manual (Sempre ativo)" },
+  "descManualMode":        { "message": "Ativa o keep-alive permanentemente, independente do agendamento" },
+  "labelForceAvailable":   { "message": "Forçar status \"Disponível\"" },
+  "descForceAvailable":    { "message": "Sempre define o status como Disponível (desativado: respeita seu status atual como Ocupado/Ausente)" },
+  "labelRespectMeetings":  { "message": "Respeitar Status de Chamada/Reunião" },
+  "descRespectMeetings":   { "message": "Não sobrescrever o status durante chamadas ou reuniões" },
+  "labelWeeklySchedule":   { "message": "Agenda Semanal" },
+  "descWeeklySchedule":    { "message": "Configure intervalos de tempo para cada dia da semana" },
+  "btnConfigureSchedule":  { "message": "Configurar Agenda" },
+
+  "sectionInfo":          { "message": "Informações" },
+  "infoNoteLabel":        { "message": "Nota:" },
+  "infoNote":             { "message": "O keep-alive só funciona quando há abas do Teams abertas." },
+  "infoTimezoneLabel":    { "message": "Fuso horário:" },
+  "infoTimezone":         { "message": "A agenda usa o fuso horário local do seu sistema." },
+  "infoLimitationLabel":  { "message": "Limitação:" },
+  "infoLimitation":       { "message": "Se o computador estiver em modo de suspensão, o keep-alive não funcionará." },
+  "labelDebugMode":       { "message": "Modo debug (logs)" },
+  "descDebugMode":        { "message": "Ativar logs no console para depuração" },
+  "warningLabel":         { "message": "Aviso:" },
+  "warningText":          { "message": "Use de forma ética e em conformidade com as políticas da sua organização." },
+  "btnDonate":            { "message": "☕ Me pague um café" },
+
+  "tabOpen":  {
+    "message": "$COUNT$ aba aberta",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "tabsOpen": {
+    "message": "$COUNT$ abas abertas",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "noTabsOpen": { "message": "Nenhuma aba aberta" },
+  "timeAgoSeconds": {
+    "message": "há $SECS$s",
+    "placeholders": { "secs": { "content": "$1" } }
+  },
+  "timeAgoMinutes": {
+    "message": "há $MINS$m",
+    "placeholders": { "mins": { "content": "$1" } }
+  },
+
+  "schedulerSubtitle":  { "message": "Configuração da Agenda Semanal" },
+  "schedulerDesc":      { "message": "Defina intervalos de tempo em que o keep-alive deve estar ativo. Slots de <strong>Todos os Dias</strong> se aplicam a todos os dias; slots por dia sobrescrevem o status naquele dia." },
+  "autoSaveNotice":     { "message": "As alterações são salvas automaticamente" },
+
+  "dayMonday":    { "message": "Segunda-feira" },
+  "dayTuesday":   { "message": "Terça-feira" },
+  "dayWednesday": { "message": "Quarta-feira" },
+  "dayThursday":  { "message": "Quinta-feira" },
+  "dayFriday":    { "message": "Sexta-feira" },
+  "daySaturday":  { "message": "Sábado" },
+  "daySunday":    { "message": "Domingo" },
+
+  "statusAvailable": { "message": "Disponível" },
+  "statusBusy":      { "message": "Ocupado" },
+  "statusAway":      { "message": "Ausente" },
+  "statusDnd":       { "message": "Não Perturbe" },
+
+  "generalScheduleLabel": { "message": "Agenda Geral" },
+  "generalBadge":         { "message": "Todos os Dias" },
+  "generalHint":          { "message": "Slots adicionados aqui se aplicam a todos os dias da semana." },
+  "perDayDivider":        { "message": "Substituições por dia" },
+  "btnAdd":               { "message": "+ Adicionar" },
+  "btnClear":             { "message": "Limpar" },
+  "titleDuplicate":       { "message": "Duplicar este intervalo" },
+  "titleRemove":          { "message": "Remover intervalo" },
+  "titleDragReorder":     { "message": "Arrastar para reordenar" },
+  "titleClockPicker":     { "message": "Abrir seletor de horário" },
+  "clockSelectHour":      { "message": "Selecionar hora" },
+  "clockSelectMinute":    { "message": "Selecionar minuto" },
+  "btnCancel":            { "message": "Cancelar" },
+  "btnOk":                { "message": "OK" }
+}

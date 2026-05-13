@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Teams Availability Scheduler - Schedule</title>
+  <title data-i18n="appName">Teams Availability Scheduler</title>
   <link rel="stylesheet" href="../css/styles.css">
   <style>
     body {
@@ -39,18 +39,19 @@
 <body>
   <div class="scheduler-wrap">
     <header>
-      <h1>Teams Availability Scheduler</h1>
-      <p class="subtitle">Weekly Schedule Configuration</p>
+      <h1 data-i18n="appName">Teams Availability Scheduler</h1>
+      <p class="subtitle" data-i18n="schedulerSubtitle">Weekly Schedule Configuration</p>
     </header>
     <div class="scheduler-body">
-      <p class="scheduler-section-desc">
+      <p class="scheduler-section-desc" data-i18n-html="schedulerDesc">
         Define time slots where keep-alive should be active.
         <strong>All Days</strong> slots apply every day; per-day slots override the status for that day.
       </p>
       <div id="scheduleContainer" class="schedule-container"></div>
-      <p class="auto-save-notice">Changes are saved automatically</p>
+      <p class="auto-save-notice" data-i18n="autoSaveNotice">Changes are saved automatically</p>
     </div>
   </div>
+  <script src="../js/i18n.js"></script>
   <script src="../js/scheduler.js"></script>
 </body>
 </html>

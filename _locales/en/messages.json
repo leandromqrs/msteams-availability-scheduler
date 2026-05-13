@@ -1,0 +1,90 @@
+{
+  "appName":        { "message": "Teams Availability Scheduler" },
+  "appDescription": { "message": "Schedule and maintain your Microsoft Teams availability status" },
+
+  "popupSubtitle":        { "message": "Schedule your Microsoft Teams availability status" },
+  "statusLabelTeams":     { "message": "Teams tabs:" },
+  "statusChecking":       { "message": "Checking..." },
+  "statusLabelKeepAlive": { "message": "Last keep-alive:" },
+  "statusNever":          { "message": "Never" },
+  "statusLabelExtension": { "message": "Extension:" },
+  "statusActive":         { "message": "Active" },
+  "statusDisabled":       { "message": "Disabled" },
+  "statusError":          { "message": "Error" },
+  "btnOpenTeams":         { "message": "Open Teams Web" },
+
+  "labelExtensionEnabled": { "message": "Extension Enabled" },
+  "descExtensionEnabled":  { "message": "Turn the keep-alive on or off" },
+  "labelManualMode":       { "message": "Manual mode (Always active)" },
+  "descManualMode":        { "message": "Activates keep-alive permanently, regardless of schedule" },
+  "labelForceAvailable":   { "message": "Force \"Available\" status" },
+  "descForceAvailable":    { "message": "Always set status to Available (off: respects your current status like Busy/Away)" },
+  "labelRespectMeetings":  { "message": "Respect Call/Meeting Status" },
+  "descRespectMeetings":   { "message": "Do not overwrite status during calls or meetings" },
+  "labelWeeklySchedule":   { "message": "Weekly Schedule" },
+  "descWeeklySchedule":    { "message": "Configure time slots for each day of the week" },
+  "btnConfigureSchedule":  { "message": "Configure Schedule" },
+
+  "sectionInfo":          { "message": "Information" },
+  "infoNoteLabel":        { "message": "Note:" },
+  "infoNote":             { "message": "Keep-alive only works when Teams tabs are open." },
+  "infoTimezoneLabel":    { "message": "Timezone:" },
+  "infoTimezone":         { "message": "The schedule uses your local timezone." },
+  "infoLimitationLabel":  { "message": "Limitation:" },
+  "infoLimitation":       { "message": "If your computer is in sleep mode, keep-alive will not work." },
+  "labelDebugMode":       { "message": "Debug mode (logs)" },
+  "descDebugMode":        { "message": "Enable console logs for debugging" },
+  "warningLabel":         { "message": "Warning:" },
+  "warningText":          { "message": "Use ethically and in compliance with your organization's policies." },
+  "btnDonate":            { "message": "☕ Buy me a coffee" },
+
+  "tabOpen":  {
+    "message": "$COUNT$ tab open",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "tabsOpen": {
+    "message": "$COUNT$ tabs open",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "noTabsOpen": { "message": "No tabs open" },
+  "timeAgoSeconds": {
+    "message": "$SECS$s ago",
+    "placeholders": { "secs": { "content": "$1" } }
+  },
+  "timeAgoMinutes": {
+    "message": "$MINS$m ago",
+    "placeholders": { "mins": { "content": "$1" } }
+  },
+
+  "schedulerSubtitle":  { "message": "Weekly Schedule Configuration" },
+  "schedulerDesc":      { "message": "Define time slots where keep-alive should be active. <strong>All Days</strong> slots apply every day; per-day slots override the status for that day." },
+  "autoSaveNotice":     { "message": "Changes are saved automatically" },
+
+  "dayMonday":    { "message": "Monday" },
+  "dayTuesday":   { "message": "Tuesday" },
+  "dayWednesday": { "message": "Wednesday" },
+  "dayThursday":  { "message": "Thursday" },
+  "dayFriday":    { "message": "Friday" },
+  "daySaturday":  { "message": "Saturday" },
+  "daySunday":    { "message": "Sunday" },
+
+  "statusAvailable": { "message": "Available" },
+  "statusBusy":      { "message": "Busy" },
+  "statusAway":      { "message": "Away" },
+  "statusDnd":       { "message": "Do Not Disturb" },
+
+  "generalScheduleLabel": { "message": "General Schedule" },
+  "generalBadge":         { "message": "All Days" },
+  "generalHint":          { "message": "Slots added here apply to every day of the week." },
+  "perDayDivider":        { "message": "Per-day overrides" },
+  "btnAdd":               { "message": "+ Add" },
+  "btnClear":             { "message": "Clear" },
+  "titleDuplicate":       { "message": "Duplicate this interval" },
+  "titleRemove":          { "message": "Remove interval" },
+  "titleDragReorder":     { "message": "Drag to reorder" },
+  "titleClockPicker":     { "message": "Open clock picker" },
+  "clockSelectHour":      { "message": "Select hour" },
+  "clockSelectMinute":    { "message": "Select minute" },
+  "btnCancel":            { "message": "Cancel" },
+  "btnOk":                { "message": "OK" }
+}
