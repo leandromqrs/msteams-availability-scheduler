@@ -1,0 +1,43 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Write CRX signing key
+        run: |
+          if [ -n "$CRX_PRIVATE_KEY" ]; then
+            echo "$CRX_PRIVATE_KEY" | base64 -d > key.pem
+          fi
+        env:
+          CRX_PRIVATE_KEY: ${{ secrets.CRX_PRIVATE_KEY }}
+
+      - name: Build
+        run: npm run build
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          FILES=$(ls dist/*.zip 2>/dev/null; ls dist/*.crx 2>/dev/null)
+          gh release create "${{ github.ref_name }}" $FILES \
+            --title "${{ github.ref_name }}" \
+            --generate-notes
