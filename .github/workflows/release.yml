@@ -25,7 +25,7 @@ jobs:
       - name: Write CRX signing key
         run: |
           if [ -n "$CRX_PRIVATE_KEY" ]; then
-            echo "$CRX_PRIVATE_KEY" | base64 -d > key.pem
+            printf '%s' "$CRX_PRIVATE_KEY" > key.pem
           fi
         env:
           CRX_PRIVATE_KEY: ${{ secrets.CRX_PRIVATE_KEY }}
