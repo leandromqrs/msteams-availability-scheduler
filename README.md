@@ -4,7 +4,7 @@
 
 ## Teams Availability Scheduler
 
-[![Build](https://github.com/leandromqrs/msteams-availability-scheduler/actions/workflows/build.yml/badge.svg)](https://github.com/leandromqrs/msteams-availability-scheduler/actions/workflows/build.yml)
+[![Release](https://github.com/leandromqrs/msteams-availability-scheduler/actions/workflows/release.yml/badge.svg)](https://github.com/leandromqrs/msteams-availability-scheduler/actions/workflows/release.yml)
 [![Chrome Web Store](https://img.shields.io/badge/Chrome-Web%20Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/teams-availability-schedu/hlchhkikddmhhnlaaeonbdnaddhijjif)
 [![Edge Add-ons](https://img.shields.io/badge/Microsoft%20Edge-Add--ons-0078D4?logo=microsoftedge&logoColor=white)](https://microsoftedge.microsoft.com/addons)
 
