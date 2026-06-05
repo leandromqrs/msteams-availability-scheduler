@@ -9,6 +9,7 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
     HEARTBEAT_MS: 3000,
     WAKEUP_MS: 10000,
     ACTIVITY_SECONDS: 30,
+    MEETING_GRACE_MS: 90000,
   };
 
   let debugMode = false;
@@ -24,12 +25,15 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
   let startTime = Date.now();
   let rtcConnection = null;
   let rafHandle = null;
+  let meetingGuardUntil = 0;
 
   let moveTimer = null;
   let statusTimer = null;
   let activityTimer = null;
   let heartbeatTimer = null;
   let wakeupTimer = null;
+  let meetingObserver = null;
+  let meetingObserverTimer = null;
 
   function log(...args) {
     if (!debugMode) return;
@@ -81,7 +85,7 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
     'en appel', 'en réunion', 'dans un appel',
     'en llamada', 'en reunión', 'en una llamada',
     'in chiamata', 'in riunione',
-    'em chamada', 'em reunião',
+    'em chamada', 'em uma chamada', 'em reunião', 'em uma reunião',
     'w rozmowie', 'na spotkaniu',
     'на звонке', 'на встрече',
     'i ett samtal', 'i ett möte',
@@ -92,6 +96,36 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
     if (!text || typeof text !== 'string') return false;
     const lower = text.toLowerCase();
     return CALL_PHRASES.some(p => lower.includes(p));
+  }
+
+  function getClassText(el) {
+    try {
+      if (!el?.className) return '';
+      if (typeof el.className === 'string') return el.className;
+      return el.className.baseVal || String(el.className);
+    } catch { return ''; }
+  }
+
+  function getElementSignalText(el, includeText = true) {
+    try {
+      if (!el) return '';
+      return [
+        getClassText(el),
+        el.getAttribute?.('aria-label') || '',
+        el.getAttribute?.('title') || '',
+        el.getAttribute?.('data-tid') || '',
+        includeText ? el.textContent || '' : '',
+      ].join(' ').toLowerCase();
+    } catch { return ''; }
+  }
+
+  function rememberMeetingSignal(reason) {
+    meetingGuardUntil = Math.max(meetingGuardUntil, Date.now() + INTERVALS.MEETING_GRACE_MS);
+    log(`Meeting guard active${reason ? ` (${reason})` : ''}`);
+  }
+
+  function hasRecentMeetingSignal() {
+    return meetingGuardUntil > Date.now();
   }
 
   function sleep(ms) {
@@ -137,22 +171,23 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
 
       for (const s of checks) {
         try {
-          const el = document.querySelector(s);
-          if (!el) continue;
-          const combined = `${el.className || ''} ${el.getAttribute('aria-label') || ''} ${el.textContent || ''}`.toLowerCase();
-          if (isCallPhrase(combined)) return 'in_call';
-          if (combined.includes('available') || combined.includes('online')) return 'available';
-          if (combined.includes('busy')) return 'busy';
-          if (combined.includes('away') || combined.includes('berightback')) return 'away';
-          if (combined.includes('offline') || combined.includes('appearoffline')) return 'offline';
-          if (combined.includes('dnd') || combined.includes('donotdisturb')) return 'dnd';
+          const els = Array.from(document.querySelectorAll(s)).slice(0, 30);
+          for (const el of els) {
+            const combined = getElementSignalText(el);
+            if (isCallPhrase(combined)) return 'in_call';
+            if (combined.includes('available') || combined.includes('online')) return 'available';
+            if (combined.includes('busy')) return 'busy';
+            if (combined.includes('away') || combined.includes('berightback')) return 'away';
+            if (combined.includes('offline') || combined.includes('appearoffline')) return 'offline';
+            if (combined.includes('dnd') || combined.includes('donotdisturb')) return 'dnd';
+          }
         } catch { continue; }
       }
       return 'unknown';
     } catch { return 'unknown'; }
   }
 
-  function isInCallOrMeeting() {
+  function detectMeetingSignal() {
     try {
       if (!document.body) return false;
       const callSelectors = [
@@ -164,6 +199,9 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
         '[data-tid="calling-sound-on-off"]', '[data-tid="microphone-button"]',
         '[data-tid="call-duration"]', '[data-tid="calling-stream"]',
         '[data-tid="calling-screen-background"]', '[data-tid="calling-pagination"]',
+        '[data-tid*="call-control"]', '[data-tid*="call-monitor"]', '[data-tid*="calling"]',
+        '[data-tid*="hangup"]', '[data-tid*="hang-up"]', '[data-tid*="meeting-toolbar"]',
+        '[data-tid*="meeting-stage"]',
       ];
       for (const s of callSelectors) {
         try { if (document.querySelector(s)) return true; } catch { continue; }
@@ -178,12 +216,64 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
       try {
         const profileBtn = document.querySelector(SEL.v2.profileButton) || document.querySelector(SEL.v1.profileButton);
         if (profileBtn) {
-          const ariaLabel = (profileBtn.getAttribute('aria-label') || '').toLowerCase();
-          if (isCallPhrase(ariaLabel)) return true;
+          if (isCallPhrase(getElementSignalText(profileBtn))) return true;
+        }
+      } catch { }
+      // Teams changes labels and data-tids often; scan likely signal-bearing nodes.
+      try {
+        const signalSelectors = [
+          '[aria-label]', '[title]', '[data-tid*="presence"]',
+          '[data-tid*="call"]', '[data-tid*="meeting"]',
+        ];
+        for (const selector of signalSelectors) {
+          const els = Array.from(document.querySelectorAll(selector)).slice(0, 150);
+          for (const el of els) {
+            if (isCallPhrase(getElementSignalText(el, false))) return true;
+          }
         }
       } catch { }
       return getCurrentStatus() === 'in_call';
     } catch { return false; }
+  }
+
+  function isInCallOrMeeting() {
+    if (detectMeetingSignal()) {
+      rememberMeetingSignal('detected');
+      return true;
+    }
+    return hasRecentMeetingSignal();
+  }
+
+  function shouldSkipStatusChangeForMeeting(respectMeetings, current = null, reason = 'status change') {
+    if (!respectMeetings) return false;
+    if (current === 'in_call') {
+      rememberMeetingSignal(reason);
+      return true;
+    }
+    if (isInCallOrMeeting()) {
+      log(`In call/meeting, skipping ${reason}`);
+      return true;
+    }
+    return false;
+  }
+
+  function startMeetingObserver() {
+    try {
+      if (meetingObserver || !document.body) return;
+      meetingObserver = new MutationObserver(() => {
+        if (meetingObserverTimer) return;
+        meetingObserverTimer = setTimeout(() => {
+          meetingObserverTimer = null;
+          if (detectMeetingSignal()) rememberMeetingSignal('observer');
+        }, 500);
+      });
+      meetingObserver.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['aria-label', 'title', 'data-tid', 'class'],
+      });
+    } catch { }
   }
 
   // --- Presence Menu ---
@@ -282,12 +372,14 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
 
   const STATUS_API_MAP = { available: 'Available', busy: 'Busy', away: 'Away', dnd: 'DoNotDisturb' };
 
-  async function setStatusViaApi(status) {
+  async function setStatusViaApi(status, respectMeetings = false) {
+    if (shouldSkipStatusChangeForMeeting(respectMeetings, null, `API ${status}`)) return 'skipped';
     const token = getPresenceToken();
-    if (!token) return false;
+    if (!token) return 'failed';
     const availability = STATUS_API_MAP[status];
-    if (!availability) return false;
+    if (!availability) return 'failed';
     try {
+      if (shouldSkipStatusChangeForMeeting(respectMeetings, null, `API ${status}`)) return 'skipped';
       const isMcas = location.hostname.includes('.mcas.ms');
       const url = isMcas
         ? 'https://presence.teams.microsoft.com.mcas.ms/v1/me/forceavailability/'
@@ -301,10 +393,10 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
         log(`[API] Status set: ${status}`);
         lastKnownStatus = status;
         lastStatusSetTime = Date.now();
-        return true;
+        return 'changed';
       }
     } catch { }
-    return false;
+    return 'failed';
   }
 
   async function ensureStatus(scheduledStatus = null) {
@@ -318,13 +410,12 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
         respectMeetings = s.config?.respectMeetingsMode !== false;
       } catch { }
 
-      if (respectMeetings && isInCallOrMeeting()) {
-        log('In call/meeting, skipping');
+      if (shouldSkipStatusChangeForMeeting(respectMeetings, current, 'status check')) {
         lastKnownStatus = current;
         return true;
       }
 
-      if (current === 'in_call' || (respectMeetings && current === 'unknown')) {
+      if (respectMeetings && current === 'unknown') {
         lastKnownStatus = current;
         return true;
       }
@@ -332,14 +423,15 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
       // Enforce scheduled status
       if (scheduledStatus && ['available', 'busy', 'away', 'dnd'].includes(scheduledStatus) && current !== scheduledStatus) {
         log(`Enforcing scheduled status: ${scheduledStatus} (current: ${current})`);
-        if (await setStatusViaApi(scheduledStatus)) return true;
-        // DOM fallback - re-check meeting state before opening menu
-        if (respectMeetings && isInCallOrMeeting()) {
-          log('In call/meeting detected before DOM fallback, skipping');
-          return true;
-        }
+        const apiResult = await setStatusViaApi(scheduledStatus, respectMeetings);
+        if (apiResult === 'changed' || apiResult === 'skipped') return true;
+        if (shouldSkipStatusChangeForMeeting(respectMeetings, null, 'DOM fallback')) return true;
         if (await openPresenceMenu()) {
           await sleep(300);
+          if (shouldSkipStatusChangeForMeeting(respectMeetings, null, 'DOM click')) {
+            await closePresenceMenu();
+            return true;
+          }
           await clickStatusOption(scheduledStatus);
           await closePresenceMenu();
           lastKnownStatus = scheduledStatus;
@@ -359,14 +451,15 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
       if (['available', 'busy', 'away', 'dnd'].includes(current)) {
         lastKnownStatus = current;
         if (forceAvailable && current !== 'available') {
-          if (await setStatusViaApi('available')) return true;
-          // DOM fallback - re-check meeting state before opening menu
-          if (respectMeetings && isInCallOrMeeting()) {
-            log('In call/meeting detected before DOM fallback, skipping');
-            return true;
-          }
+          const apiResult = await setStatusViaApi('available', respectMeetings);
+          if (apiResult === 'changed' || apiResult === 'skipped') return true;
+          if (shouldSkipStatusChangeForMeeting(respectMeetings, null, 'DOM fallback')) return true;
           if (await openPresenceMenu()) {
             await sleep(300);
+            if (shouldSkipStatusChangeForMeeting(respectMeetings, null, 'DOM click')) {
+              await closePresenceMenu();
+              return true;
+            }
             await clickStatusOption('available');
             await closePresenceMenu();
             lastKnownStatus = 'available';
@@ -377,14 +470,15 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
       }
 
       // Status is offline/unknown - set to available
-      if (await setStatusViaApi('available')) return true;
-      // DOM fallback - re-check meeting state before opening menu
-      if (respectMeetings && isInCallOrMeeting()) {
-        log('In call/meeting detected before DOM fallback, skipping');
-        return true;
-      }
+      const apiResult = await setStatusViaApi('available', respectMeetings);
+      if (apiResult === 'changed' || apiResult === 'skipped') return true;
+      if (shouldSkipStatusChangeForMeeting(respectMeetings, null, 'DOM fallback')) return true;
       if (!await openPresenceMenu()) { await closePresenceMenu(); return false; }
       await sleep(300);
+      if (shouldSkipStatusChangeForMeeting(respectMeetings, null, 'DOM click')) {
+        await closePresenceMenu();
+        return true;
+      }
       const ok = await clickStatusOption('available');
       await closePresenceMenu();
       if (ok) { lastKnownStatus = 'available'; lastStatusSetTime = Date.now(); }
@@ -523,7 +617,11 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
     if (activityTimer) clearInterval(activityTimer);
     if (heartbeatTimer) clearInterval(heartbeatTimer);
     if (wakeupTimer) clearInterval(wakeupTimer);
+    if (meetingObserverTimer) clearTimeout(meetingObserverTimer);
+    if (meetingObserver) meetingObserver.disconnect();
     if (rafHandle) cancelAnimationFrame(rafHandle);
+    meetingObserverTimer = null;
+    meetingObserver = null;
     log('Stopped');
   }
 
@@ -576,6 +674,7 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
     await detectVersion();
     log('Teams version:', teamsVersion);
     lastKnownStatus = getCurrentStatus();
+    startMeetingObserver();
 
     const trackActivity = (e) => {
       if (!e || e.isTrusted !== false) lastActivityTime = Date.now();
@@ -629,7 +728,7 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
       simulateActivity();
     }, INTERVALS.INITIAL_DELAY_MS);
 
-    log('Ready. Intervals: Mouse(5s), Status(30s), Activity(30s), Heartbeat(3s), Wakeup(10s)');
+    log(`Ready. Intervals: Mouse(5s), Status(${INTERVALS.CHECK_SECONDS}s), Activity(30s), Heartbeat(3s), Wakeup(10s)`);
   }
 
   // --- Messages ---
@@ -695,6 +794,7 @@ window.__teamsKeepAliveInitialized || (window.__teamsKeepAliveInitialized = true
 
   window.teamsKeepAliveDebug = {
     getStatus: getCurrentStatus,
+    isInCallOrMeeting,
     setAvailable: ensureStatus,
     getVersion: () => teamsVersion,
     isActive: () => isRunning,
